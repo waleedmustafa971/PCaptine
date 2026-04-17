@@ -92,3 +92,49 @@ export interface DriverProfile {
   memberSince: string;
   verificationStatus: 'approved' | 'pending' | 'rejected';
 }
+
+export type MessageSender = 'driver' | 'sender';
+
+export interface ChatMessage {
+  id: string;
+  deliveryId: string;
+  sender: MessageSender;
+  text: string;
+  timestamp: string;
+  read: boolean;
+}
+
+export type NotificationType =
+  | 'new_job'
+  | 'offer_accepted'
+  | 'offer_declined'
+  | 'payment'
+  | 'system';
+
+export interface AppNotification {
+  id: string;
+  type: NotificationType;
+  title: string;
+  body: string;
+  timestamp: string;
+  read: boolean;
+  relatedId?: string;
+}
+
+export interface Rating {
+  id: string;
+  deliveryId: string;
+  senderName: string;
+  stars: number;
+  comment?: string;
+  givenAt: string;
+}
+
+export type KYCDocumentStatus = 'pending' | 'approved' | 'rejected' | 'missing';
+
+export interface KYCStatus {
+  license: KYCDocumentStatus;
+  vehicleRegistration: KYCDocumentStatus;
+  selfie: KYCDocumentStatus;
+  overallStatus: 'approved' | 'pending' | 'rejected';
+}

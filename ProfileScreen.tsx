@@ -10,8 +10,8 @@ import Icon from 'react-native-vector-icons/Feather';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, Radius, Spacing, Typography } from './theme';
 import { ScreenHeader } from './ScreenHeader';
-import { DriverActionButton } from './DriverActionButton';
-import { mockDriverProfile } from './mockData';
+import { mockDriverProfile, mockRatings } from './mockData';
+import { useApp } from './AppContext';
 
 interface MenuRow {
   icon: string;
@@ -42,7 +42,14 @@ const supportRows: MenuRow[] = [
 
 export const ProfileScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
+  const { logout } = useApp();
   const profile = mockDriverProfile;
+
+  const handleMenuPress = (label: string) => {
+    if (label === 'Sign Out') {
+      logout();
+    }
+  };
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -98,9 +105,44 @@ export const ProfileScreen: React.FC = () => {
           </View>
         </View>
 
-        <MenuSection title="Account" rows={accountRows} />
-        <MenuSection title="Preferences" rows={preferenceRows} />
-        <MenuSection title="Support" rows={supportRows} />
+        {/* Recent ratings */}
+        <View style={styles.ratingsSection}>
+          <Text style={styles.sectionTitle}>RECENT RATINGS</Text>
+          <View style={styles.menuGroup}>
+            {mockRatings.map((r, index) => (
+              <View
+                key={r.id}
+                style={[
+                  styles.ratingRow,
+                  index !== mockRatings.length - 1 && styles.menuRowBorder,
+                ]}
+              >
+                <View style={styles.ratingStars}>
+                  {[1, 2, 3, 4, 5].map(i => (
+                    <Icon
+                      key={i}
+                      name="star"
+                      size={12}
+                      color={i <= r.stars ? Colors.warning : Colors.border}
+                    />
+                  ))}
+                </View>
+                <View style={styles.ratingInfo}>
+                  <Text style={styles.ratingName}>{r.senderName}</Text>
+                  {r.comment ? (
+                    <Text style={styles.ratingComment} numberOfLines={1}>
+                      "{r.comment}"
+                    </Text>
+                  ) : null}
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        <MenuSection title="Account" rows={accountRows} onPress={handleMenuPress} />
+        <MenuSection title="Preferences" rows={preferenceRows} onPress={handleMenuPress} />
+        <MenuSection title="Support" rows={supportRows} onPress={handleMenuPress} />
 
         <View style={styles.footer}>
           <Text style={styles.versionText}>PCaptine v1.0.0</Text>
@@ -113,10 +155,11 @@ export const ProfileScreen: React.FC = () => {
   );
 };
 
-const MenuSection: React.FC<{ title: string; rows: MenuRow[] }> = ({
-  title,
-  rows,
-}) => (
+const MenuSection: React.FC<{
+  title: string;
+  rows: MenuRow[];
+  onPress?: (label: string) => void;
+}> = ({ title, rows, onPress }) => (
   <View style={styles.section}>
     <Text style={styles.sectionTitle}>{title.toUpperCase()}</Text>
     <View style={styles.menuGroup}>
@@ -127,6 +170,7 @@ const MenuSection: React.FC<{ title: string; rows: MenuRow[] }> = ({
             styles.menuRow,
             index !== rows.length - 1 && styles.menuRowBorder,
           ]}
+          onPress={() => onPress?.(row.label)}
         >
           <View
             style={[
@@ -269,6 +313,33 @@ const styles = StyleSheet.create({
   menuValue: {
     ...Typography.caption,
     marginRight: Spacing.xs,
+  },
+  ratingsSection: {
+    marginBottom: Spacing.lg,
+  },
+  ratingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    gap: Spacing.sm,
+  },
+  ratingStars: {
+    flexDirection: 'row',
+    gap: 2,
+  },
+  ratingInfo: {
+    flex: 1,
+  },
+  ratingName: {
+    ...Typography.bodyBold,
+    fontSize: 13,
+  },
+  ratingComment: {
+    ...Typography.caption,
+    color: Colors.textSecondary,
+    fontStyle: 'italic',
+    marginTop: 1,
   },
   footer: {
     alignItems: 'center',

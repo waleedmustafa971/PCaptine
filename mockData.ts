@@ -5,6 +5,10 @@ import {
   EarningsBreakdown,
   Transaction,
   DriverProfile,
+  ChatMessage,
+  AppNotification,
+  Rating,
+  KYCStatus,
 } from './types';
 
 export const mockDriverProfile: DriverProfile = {
@@ -249,3 +253,134 @@ export const mockTransactions: Transaction[] = [
     status: 'released',
   },
 ];
+
+export const mockChatMessages: ChatMessage[] = [
+  {
+    id: 'msg_001',
+    deliveryId: 'dlv_501',
+    sender: 'sender',
+    text: 'Hi, are you on your way to pick up the items?',
+    timestamp: '2026-04-17T09:10:00Z',
+    read: true,
+  },
+  {
+    id: 'msg_002',
+    deliveryId: 'dlv_501',
+    sender: 'driver',
+    text: 'Yes, I am about 10 minutes away from the pickup location.',
+    timestamp: '2026-04-17T09:11:30Z',
+    read: true,
+  },
+  {
+    id: 'msg_003',
+    deliveryId: 'dlv_501',
+    sender: 'sender',
+    text: 'Great! The items are packed and ready. Please call when you arrive.',
+    timestamp: '2026-04-17T09:12:00Z',
+    read: true,
+  },
+  {
+    id: 'msg_004',
+    deliveryId: 'dlv_501',
+    sender: 'driver',
+    text: 'Will do. See you shortly.',
+    timestamp: '2026-04-17T09:12:45Z',
+    read: true,
+  },
+  {
+    id: 'msg_005',
+    deliveryId: 'dlv_501',
+    sender: 'sender',
+    text: 'The desk has glass on top — please handle with care.',
+    timestamp: '2026-04-17T09:14:00Z',
+    read: false,
+  },
+];
+
+export const mockNotifications: AppNotification[] = [
+  {
+    id: 'notif_001',
+    type: 'new_job',
+    title: 'New job nearby',
+    body: 'A pickup in Business Bay — AED 85. Tap to view.',
+    timestamp: '2026-04-17T09:42:00Z',
+    read: false,
+    relatedId: 'shp_101',
+  },
+  {
+    id: 'notif_002',
+    type: 'payment',
+    title: 'Payment released',
+    body: 'AED 55 from Layla Abdullah has been released to your wallet.',
+    timestamp: '2026-04-17T07:16:00Z',
+    read: false,
+    relatedId: 'txn_901',
+  },
+  {
+    id: 'notif_003',
+    type: 'offer_accepted',
+    title: 'Counter-offer accepted',
+    body: 'Omar Siddique accepted your counter-offer of AED 45.',
+    timestamp: '2026-04-17T06:05:00Z',
+    read: true,
+    relatedId: 'shp_084',
+  },
+  {
+    id: 'notif_004',
+    type: 'new_job',
+    title: 'New job nearby',
+    body: 'Pickup in JBR — AED 65. 2 drivers looking at it.',
+    timestamp: '2026-04-17T05:58:00Z',
+    read: true,
+    relatedId: 'shp_102',
+  },
+  {
+    id: 'notif_005',
+    type: 'system',
+    title: 'Profile fully verified',
+    body: 'Your documents have been reviewed and approved. You are now fully verified.',
+    timestamp: '2026-04-16T14:30:00Z',
+    read: true,
+  },
+  {
+    id: 'notif_006',
+    type: 'payment',
+    title: 'Weekly earnings summary',
+    body: 'You earned AED 2,148.75 this week across 47 trips. Great work!',
+    timestamp: '2026-04-14T20:00:00Z',
+    read: true,
+  },
+];
+
+export const mockRatings: Rating[] = [
+  {
+    id: 'rat_001',
+    deliveryId: 'dlv_499',
+    senderName: 'Layla Abdullah',
+    stars: 5,
+    comment: 'Very professional and careful with my items. Highly recommended!',
+    givenAt: '2026-04-17T07:20:00Z',
+  },
+  {
+    id: 'rat_002',
+    deliveryId: 'dlv_498',
+    senderName: 'Omar Siddique',
+    stars: 5,
+    comment: 'Fast and punctual. Will use again.',
+    givenAt: '2026-04-17T06:25:00Z',
+  },
+  {
+    id: 'rat_003',
+    deliveryId: 'dlv_497',
+    senderName: 'Fatima Al Zaabi',
+    stars: 4,
+    givenAt: '2026-04-17T05:50:00Z',
+  },
+];
+
+export const mockKYCStatus: KYCStatus = {
+  license: 'approved',
+  vehicleRegistration: 'approved',
+  selfie: 'approved',
+  overallStatus: 'approved',
+};

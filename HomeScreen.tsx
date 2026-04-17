@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Colors, Radius, Spacing, Typography } from './theme';
 import { StatsCard } from './StatsCard';
 import { StatsCardSkeleton } from './SkeletonLoader';
@@ -17,16 +19,21 @@ import {
   mockDriverProfile,
   mockDriverStats,
   mockRecentDeliveries,
+  mockNotifications,
 } from './mockData';
 import { DriverStats, Delivery } from './types';
+import { RootStackParamList } from './NavigationTypes';
 
 export const HomeScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [isOnline, setIsOnline] = useState(true);
   const [loadingStats, setLoadingStats] = useState(true);
   const [stats, setStats] = useState<DriverStats | null>(null);
   const [recent, setRecent] = useState<Delivery[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const unreadNotifs = mockNotifications.filter(n => !n.read).length;
 
   const loadData = (simulatedDelay = 1400) => {
     setLoadingStats(true);
@@ -56,9 +63,12 @@ export const HomeScreen: React.FC = () => {
           <Text style={Typography.caption}>Good morning,</Text>
           <Text style={styles.driverName}>{firstName}</Text>
         </View>
-        <Pressable style={styles.notifBtn}>
+        <Pressable
+          style={styles.notifBtn}
+          onPress={() => navigation.navigate('Notifications')}
+        >
           <Icon name="bell" size={20} color={Colors.textPrimary} />
-          <View style={styles.notifDot} />
+          {unreadNotifs > 0 && <View style={styles.notifDot} />}
         </Pressable>
       </View>
 
